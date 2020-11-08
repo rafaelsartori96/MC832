@@ -8,3 +8,5 @@
 *.aux
 *.out
 *.log
+# Não ignoramos arquivos de enunciado
+!*-enunciado.pdf
