@@ -1,0 +1,10 @@
+# Ignoramos arquivos sem extensão (executáveis em unix)
+*
+!*.*
+!*/
+
+# Ignoramos PDFs prontos e arquivos auxiliares de LaTeX
+*.pdf
+*.aux
+*.out
+*.log

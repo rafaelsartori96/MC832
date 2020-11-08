@@ -1,0 +1,115 @@
+% Rafael Sartori M. dos Santos, 186154
+\documentclass[brazilian,a4paper,twocolumn]{article}
+
+% Título
+\title{MC832 -- Prova 1}
+\author{Rafael Sartori M. Santos, 186154}
+\date{19 de novembro de 2020}
+
+% Configuração do documento
+%\setlength{\parskip}{3pt}
+\usepackage[utf8]{inputenc} % tipo de documento UTF-8
+%\usepackage{mathtools} % permitir expressões matemáticas
+%\usepackage{breqn} % equações quebradas em várias linhas automaticamente
+\usepackage{babel} % configuração da lingua portuguesa
+\usepackage{caption} % para legenda de tabelas e figuras
+\usepackage[
+    pdfauthor={Rafael Sartori M. Santos},
+    pdftitle={Prova 1 -- MC832},
+    pdfproducer={LaTeX (texlive) com hyperref},
+    hidelinks
+]{hyperref} % para links externos (href)
+\usepackage{cleveref} % para referenciar tabelas e figuras melhor
+\usepackage{indentfirst} % indentação de todo primeiro parágrafo
+\usepackage{graphicx} % para adicionar imagens
+\graphicspath{{imgs-prova1/}} % atalho para o caminho das imagens
+\usepackage{float} % para fixar posição de imagens
+\usepackage{subcaption} % para imagens ficarem lado a lado
+% Usamos geometry pois dá mais espaço que fullpage
+%\usepackage{geometry} % alterar geometria do papel
+%\geometry{a4paper,left=1.7cm,right=1.7cm,top=1cm,bottom=2.0cm} % menor margem
+\usepackage{fullpage} % utilizamos uma versão com menos espaçamento nas bordas
+\usepackage{verbatim} % pacote para incluir arquivos em verbatim
+\usepackage{mdframed} % para enquadrar coisas
+\usepackage[bitstream-charter]{mathdesign} % Mudamos a fonte para Charter BT
+\usepackage[T1]{fontenc} % Mudamos a fonte para Charter BT
+
+% Início do documento
+\begin{document}
+
+\maketitle
+
+\section{Resumo}
+
+O usuário acessa a internet através do celular dentro do carro que provavelmente estará se movendo, então sua conexão com a internet, que é realizada por protocolos de redes móveis, irá alternar entre diversos pontos de acesso. Essa mudança de pontos de acesso é prevista no protocolo para manter todas as conexões, evitar a perda de pacote e age de forma natural e muitas vezes imperceptível ao usuário.
+
+O usuário tenta acessar a página HTTP de um domínio através da aplicação de navegador, o navegador internamente faz a requisição ao servidor DNS através de uma conexão TCP ou, mais comumente nessa aplicação, utilizando o protocolo UDP para obter o endereço do servidor apontado pelo domínio. Depois tenta criar uma conexão TCP com o servidor apontado pelo domínio obtido do DNS e, se obtiver sucesso, envia um pedido de página HTTP para esse endereço. O servidor então busca a página através da aplicação \textit{web} e responde ao usuário na mesma conexão criada.
+
+O navegador, ao receber a página HTML, começa a interpretá-la e envia requisições da mesma forma ao servidor de elementos faltantes da página, que podem ser imagens, \textit{scripts}. Cada versão de HTTP trata essas requisições de forma diferente: podem utilizar conexões novas, reaproveitar a que foi utilizada para requisitar a página inicial ou ainda usar várias conexões simultâneas desde o começo, já que atualmente é comum sites HTTP pedirem mais de um arquivo por página. No caso da abertura de novas conexões, é comum o celular, o navegador ou até mesmo a rede móvel fornecer uma resposta mais rápida à uma requisição DNS que seja idêntica a uma feita anteriormente através do \textit{caching}. O servidor responde utilizando a conexão que o usuário criou ou manteve aberta e o navegador volta a interpretrar os itens recebidos, mostrando a página ao usuário dentro do carro em movimento.
+
+Realmente é uma enorme jornada que tomamos como automática, rápida e simples, mas está bem longe de simples ou automática.
+
+
+\section{A internet e suas camadas}
+
+A rede de computadores foi projetada com diversas camadas para encapsularmos problemas e a fucionalidade da rede, sem que o usuário precise saber de como a rede funciona ou o que ela faz para lidar com seus problemas internos. O principal modelo de rede é o modelo OSI (\textit{Open System Interconnection}) da ISO (sigla em inglês para a Organização Internacional de Normalização).
+
+A internet é uma implementação de uma rede de computadores que foi adotada praticamente pelo mundo inteiro, interligada em vários pontos inclusive com cabos de fibra ótica que passam no fundo do oceano para ligar, por exemplo, a Europa à América. A internet difere um pouco do modelo OSI. São as camadas da internet:
+
+\begin{itemize}
+    \item{\textbf{Física:} é a camada que representa o meio físico de transporte, cada meio físico tem diferentes necessidades, limitações e capacidades;}
+    \item{\textbf{Enlace:} é a camada que transmite os pacotes pelo meio físico e efetua a conferência e correção de erros de transporte (análise de sinais para diminuir interferências, impedir congestionamento do meio físico);}
+    \item{\textbf{Rede:} é a camada que realiza o redirecionamento de pacotes, transportando os dados até chegar em seu destino;}
+    \item{\textbf{Transporte:} é a camada que realiza multiplexação e demultiplexação dos dados para guiar o pacote ao processo certo, ela pode ou não incluir mais dados sobre o pacote para que haja conferência se todos os pacotes foram transmitidos corretamente no lado do receptor e ainda realizar a retransmissão caso haja falhas;}
+    \item{\textbf{Aplicação:} a mais próxima do usuário, é a camada que envia e recebe informações de uma maneira ordenada e acordada entre o cliente-servidor através de convenções privadas ou públicas, essa camada abrange no modelo OSI as camadas \textbf{Sessão}, \textbf{Apresentação} e \textbf{Aplicação}, ou seja, a aplicação possui liberdade para executar o protocolo que quiser (seja protocolo criado exclusivamente alguma funcionalidade privada ou por protocolos muito bem estipulados por comissões internacionais para uma funcionalidade geral, pública).}
+\end{itemize}
+
+Na rede, clientes são os que iniciam a comunicação com os servidores, ou seja, um mesmo computador pode possuir aplicações clientes, aplicações servidores e aplicações que são ambos. A comunicação pode ser bilateral entre cliente e servidor, mas o início dela deve acontecer por parte do cliente, pois o servidor a priori não sabe quem deseja o quê.
+
+Com essas camadas implementadas e interligadas formando uma rede, teremos o núcleo da rede onde os pacotes não serão interpretados senão pelas informações necessárias para determinar o destinatário e serem transmitidos de acordo. Nas bordas da rede, teremos todos os clientes e servidores que irão produzir e enviar pacotes, receber e interpretá-los. O núcleo da rede utiliza apenas as camadas física, de enlace e de rede, que são as necessárias para a transmissão dos dados e determinação do destino do pacote, enquanto as bordas utilizam todas, pois de fato precisam interpretar as informações transmitidas ou produzir essas informações para que a aplicação faça efetivo uso da rede.
+
+Na internet, o endereço de um dispositivo conectado na rede é denonimado endereço IP (\textit{Internet Protocol}), um número de 32 \textit{bits} para a versão 4 ou de 128 para a versão 6. Há várias regras para endereços IPs: alguns valores são reservados, alguns utilizados para redes locais e outros para redes públicas. A versão 6 também ainda não é suportada por todos os dispositivos mesmo que sua adesão tenha crescido bastante na última década.
+
+Os usuários devem contratar provedores de serviço de internet (\textit{Internet Service Provider}, ISP) para adquirirem acesso à internet. ISPs são empresas que administram o núcleo da rede, construindo e mantendo o cabeamento necessário para isso, possibilitando conexões entre outras ISPs e todas juntas formando a rede internet que conecta o mundo todo. A ISP administrará seu endereço IP (pode ser dinâmico e mudar depois de algum tempo ou estático e quase nunca mudar), também irá providenciar os credenciais necessários para o usuário se conectar à rede de acesso, que está ligada ao núcleo da rede.
+
+Em vários países, há leis que regulam ISPs para manter a privacidade de seus clientes, para garantir que o acesso não é privilegiado em relação a outros clientes, para garantir que a velocidade contratada é próxima à velocidade recebida pelo usuário.
+
+A rede local, com IPs atribuídos por um roteador particular aos computadores conectados, é chamada de \textit{local area network} (LAN), a velocidade de transferência dentro da rede é apenas limitada pelo roteador, por isso é tipicamente maior que a taxa de transferência com a rede externa, chamada de \textit{wide area network} (WAN), que é a internet (onde os IPs são atribuídos pelos provedores), pois o custo de implementar uma rede de alta velocidade para todos os usuários numa rede de longa distância é maior do que numa rede local para poucos usuários e curta distância.
+
+
+\subsection{Camada de aplicação}
+
+É a camada mais dinâmica de todas porque cada aplicação no seu computador que utiliza de alguma forma a internet pode fazer uso dela como quiser (dentro das limitações impostas pela rede). Desde que o servidor consiga se comunicar com o cliente e vice-versa, qualquer protocolo vale.
+
+Por essa aplicação ser tão dinâmica, há poucos requisitos para se criar uma aplicação que faz uso da internet: basta saber o endereço para o qual você deseja enviar um pacote e a porta do servidor que esteja preparado para receber esse pacote e o protocolo para transmitir essas informações, a camada de transporte fará o trabalho de transmitir (e, se necessário, retransmitir) esse pacote até o destinatário correto.
+
+Algumas aplicações essenciais para a internet que conhecemos hoje são DNS e HTTP.
+
+\subsubsection{DNS}
+
+O DNS ou \textit{domain name system} é um sistema que possibilita a tradução de nomes de domínios que são facilmente lembrados por humanos como \texttt{google.com} ou \texttt{unicamp.br} em endereços IP do servidor. DNS também permite vários tipos de entradas: \texttt{A}, \texttt{AAAA}, \texttt{MX}, \texttt{ALIAS}, \texttt{CNAME} etc. cada uma com sua funcionalidade específica que permite diferentes tipos de requisições de serviço (servidor de e-mail ser diferente do seu servidor \textit{web} mesmo que o domínio seja o mesmo, ou ainda fazer balanço de requisições através de uma mudança de entrada \texttt{A} para um servidor secundário quando o servidor primário começar a ficar sobrecarregado, por exemplo).
+
+A estrutura do DNS para resolução de nomes é hierárquica: há, no topo, os servidores raiz que respondem os servidores \textit{top level domain} (TLD, que são os domínios específicos de países, \texttt{.br}, \texttt{.ar}, ou os genéricos como \texttt{.org}, \texttt{.com}, \texttt{.gov}). Os servidores TLD respondem os servidores autoritativos, que são os que guardam de fato as entradas para o domínio buscado. Todo servidor autoritativo possui um servidor espelho que servirá de \textit{backup}, um servidor secundário.
+
+Como a estrutura é hierárquica, poderia haver enorme sobrecarga das instâncias dos servidores raiz, então há diversos servidores que realizam o \textit{caching} das pesquisas já feitas e distribuem os pedidos entre os usuários. Muitas ISPs possuem seu próprio servidor DNS desse tipo, chamados de DNS local. Além da distribuição, há diferentes tipos de consultas DNS: recursiva (responde fazendo a busca pelo servidor raiz quando não possui \textit{cache} da requisição), iterativa (responde com o servidor DNS autoritativo sobre o domínio, para obter a resposta atualizada apropriada) e não recursiva (busca registros onde o servidor é autoritativo ou possui \textit{cache}, mas não consegue responder caso contrário).
+
+Seu computador, roteador também podem possuir servidores DNS locais para melhorar ainda mais a latência de respostas em \textit{cache}.
+
+As diversas aplicações cliente e servidor do DNS implementam um protocolo de comunicação comum, assim mesmo implementações de cliente ou servidor distintas conseguem se comunicar por uma estrutura comum de pacotes.
+
+\subsubsection{HTTP}
+
+Como DNS, HTTP também possui enorme quantidade de implementações de um protocolo de comunicação que é comum. Essencialmente, HTTP serve para que clientes consigam pedir arquivos \textit{hypertext} (texto estruturado que possui ligações para outros arquivos) e arquivos de mídia necessários para apresentação dessa estrutura. Esses arquivos que formam páginas exibidas ao cliente podem conter referências a outras páginas. Páginas de um mesmo domínio são chamados de site e a ligação entre páginas de diferentes sites formam a \textit{world wide web} através de uma cadeia enorme de páginas interligadas.
+
+HTTP historicamente foi associado através dos navegadores ao HTML, um formato de texto hierárquico que descreve visualmente uma página. Hoje esse formato ganhou muitas funcionalidades dinâmicas (que não requerem recarregar a página a cada clique) através de \textit{scripts} e ficaram mais bonitas com arquivos que descrevem estilos (\textit{Cascading Style Sheets} ou CSS).
+
+O protocolo sofreu algumas reformas logo após sua criação mas passou muito tempo na mesma versão (\texttt{HTTP/1.1}) até a adoção ainda crescente da segunda versão, o \texttt{HTTP/2.0}. Com a nova versão, agora há algumas formas de tratar conexões:
+
+\begin{itemize}
+    \item \textbf{HTTP não persistente:} nesse modo, após o envio de um único objeto, a conexão é fechada e, caso exista a necessidade de pedir outro objeto, uma nova conexão deve ser criada;
+    \item \textbf{HTTP persistente:} a conexão é mantida para evitar o \textit{overhead} de criar uma nova quando há a necessidade de pedir outro objeto, diminuindo o tempo para página carregar;
+    \item \textbf{HTTP com paralelismo:} várias conexões são criadas para pedir em paralelo diversos objetos (é comum HTML possuir a necessidade de vários objetos serem carregados) e ainda é possível fazer isso com persistência;
+    \item \textbf{HTTP com multiplexação:} a nova versão do HTTP (\texttt{HTTP/2.0}) permite que uma única conexão seja utilizada, o diferencial é que a requisição será quebrada em partes, \texttt{HEADERS} e \texttt{DATA}, enquanto permite o envio e recebimento simultâneo entre cliente e servidor através de \textit{streams}. É uma abordagem que diminui o tempo de carregamento inclusive em condições de baixa estabilidade de rede pois não há a necessidade de várias conexões para se pedir vários arquivos simulteamente. Também é muito útil nos sites modernos que fazem uso de \textit{scripts} para se comunicar com o servidor (como Facebook, Instagram, sites cujas páginas são dinâmicas ao invés de carregar a página totalmente no primeiro acesso e após cada clique).
+\end{itemize}
+
+\end{document}
