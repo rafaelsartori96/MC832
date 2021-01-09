@@ -8,7 +8,11 @@
 *.aux
 *.out
 *.log
+
+# Ignoramos arquivos do Draw.io
+*.drawio
+
 # Não ignoramos arquivos de enunciado
 !*-enunciado.pdf
 # Não ignoramos arquivos importantes para a resolução
-!prova1-figura-estrutura.pdf
+!prova*-*.pdf
