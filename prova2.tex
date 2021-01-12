@@ -39,8 +39,6 @@
 
 \maketitle
 
-% https://classroom.google.com/u/1/c/MTQ4NTIwNTk0OTkx/a/MjQ5MDYyNzU5NDQ2/details
-
 \section*{Exercício 1}
 
 \textit{Network Address Translation} (NAT) é um recurso que surgiu para ``parametrizar'' redes, assim empresas e datacenteres não necessitariam atualizar os endereços de todos os servidores na mudança de provedores de internet, ao mover a rede ou ainda atualizar algum endereço público de um servidor específico. O recurso se popularizou para diminuir a quantidade de endereços IP devido a excassez causada pela inclusão digital e limites do IPv4.
@@ -63,11 +61,34 @@ O NAT, portanto, é uma ideia bem ampla e dinâmica, o que possibilita a reduç�
 
 \section*{Exercício 2}
 
-Figura explicando encaminhamento do roteador R1.
+\begin{figure*}[h!]
+    \centering
+    \includegraphics[width=0.9\textwidth]{prova2-ospf.pdf}
+    \caption{Ilustração do funcionamento de \textit{Open Shortest Path First} (OSPF)}
+    \label{fig-ospf}
+\end{figure*}
+
+Utilizando \textit{Open Shortest Path First} (OSPF), o roteador $R1$ recebe pacotes enviados por \textit{multicast} dos roteadores adjacentes a ele. Esses pacotes contém o custo utilizado pelo algoritmo, que pode ser fixo determinado por um administrador ou capacidade total do \textit{link}, dinâmico baseado em sua capacidade livre ou ainda uma mistura de todos esses fatores. Também contém identificadores: um individual e outro da área a que pertence.
+
+Com isso, o roteador $R1$ pode formar uma tabela com os custos da transmissão do pacote a roteadores adjacentes e pode receber ainda tabelas de seus vizinhos da mesma área, para auxiliá-lo a tomar decisões sobre o menor caminho a ser tomado, mesmo que essa decisão não seja forçada pelo próximo roteador que receber o pacote.
+
+Os roteadores enviam esse \textit{multicast} a cada um período de tempo determinado para atualizar custos e ainda tornar-se visível a novos roteadores na área.
+
+A \cref{fig-ospf} exemplifica o uso de OSPF na descoberta de roteadores adjacentes. Nesse caso, o nosso roteador $R1$ recebe primeiro um pacote simples de $R2$ com seu custo, $C_{1,2}$, depois o de $R3$ e, por fim, a tabela de $R4$, que contém seu custo e o custo de seus adjacentes ($R5$ e $R6$).
+
+Dessa forma, $R1$ pode tomar decisões de caminhos diferentes a depender do destino e dos custos, essa decisão pode se tornar mais interessante, sobretudo, quando/se o roteador $R3$ enviar sua tabela, que contém também o custo de $R6$ a partir dele na nossa rede $AS 16$.
 
 
 \section*{Exercício 3}
 
-Explique funcionamento do CSMA-CA no Wi-Fi.
+Wi-Fi podem utilizar protocolos para evitar colisão ou congestionamento da rede sem fio. \textit{Carrier-sense multiple access with collision avoidance} (CSMA/CA) é um protocolo que tenta solucionar esse problema tomando uma solução em que um cliente espera uma ``brecha'' (período de tempo em que a antena parece estar ociosa) para evitar colisões de pacotes.
+
+O protocolo utiliza o princípio ``ouça antes de falar'', assim o cliente procura por alguma transmissão no mesmo canal que o destino antes de enviar seu pacote. Caso mais de um cliente enviem pacotes simultaneamente, causando uma colisão, ambos aguardam por períodos aleatórios de tempo provavelmente distintos entre si (por conta da aleatoriedade) e enviam novamente, para diminuir a chance de outra colisão.
+
+Este protocolo não é confiável pois um cliente pode não estar próximo o suficiente de outro cliente para ouvir que o canal de transmissão está ocupado. Além disso, o tempo escolhido aleatoriamente pode coincidir entre dois clientes, causando uma segunda colisão e maior latência.
+
+O protocolo ainda prevê pedidos \textit{Request to Send} (RTS) e \textit{Clear to Send} (CTS), uma forma manual de pedir e conceder, respectivamente, permissão para o cliente enviar dados. Dessa forma, o problema de acreditar que o canal está livre quando não está por um cliente a distância é minimizado.
+
+O protocolo possui como principal desvantagem a demora para envio (aguardando receptor ocioso) e principal vantagem a maior quantidade de pacotes recebidos sem colisões.
 
 \end{document}
